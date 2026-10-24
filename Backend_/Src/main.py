@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException,requests
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routes.crop_routes import crop_routes
-from fastapi.middleware.cors import CORSMiddleware
+
 
 
 def createApp():
@@ -12,7 +12,9 @@ def createApp():
         allow_origins=[
             "http://localhost:5173",
         "https://cropshow.vercel.app",
-        ]
+        ],
+         allow_methods=["*"],
+         allow_headers=["Content-Type"]
     )
     app.include_router(crop_routes)
     @app.get("/")

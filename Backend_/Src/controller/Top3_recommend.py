@@ -19,22 +19,22 @@ def top_3_crops():
              data.get("rainfall"),]
         ])
 
-    input_scaled = scaler.transform(input_data)
-    probabilities = model.predict(input_scaled, verbose=0)[0]
-    top_3_indices = np.argsort(probabilities)[-3:][::-1]
+    input_scaled=scaler.transform(input_data)
+    probabilities=model.predict(input_scaled, verbose=0)[0]
+    top_3_indices=np.argsort(probabilities)[-3:][::-1]
     top_3_crop=[]
     print("Top 3 Recommended Crops:\n")
     for index in top_3_indices:
-
-        crop = label_encoder.inverse_transform([index])[0]
-
-        confidence = probabilities[index] * 100
-
+        crop=label_encoder.inverse_transform([index])[0]
+        confidence=probabilities[index] * 100
         top_3_crop.append({
             "crop":crop,
-            "probability": round(float(confidence),2)
+            "probability":round(float(confidence),2)
         })
         return top_3_crop
+
+
+
 
 
 

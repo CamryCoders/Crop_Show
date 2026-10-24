@@ -4,7 +4,7 @@ import numpy as np
 import random
 import time
 
-from load_data import model, scaler, label_encoder
+from load_data import model, scaler,label_encoder
 from middleware.validate_input import CropInput
 
 router = APIRouter(prefix="/api/crop", tags=["Crop"])
@@ -23,33 +23,29 @@ def cropRecommend(data: CropInput):
         data.ph,
         data.rainfall
     ]])
+    input_scaled=scaler.transform(input_data)
+    input_tensor=input_scaled.astype(np.float32)
+    input_name=model.get_inputs()[0].name
     
-    # 1. Scale the input data
-    input_scaled = scaler.transform(input_data)
     
-    # 2. Run inference using ONNX Runtime (replaces model.predict)
-    input_tensor = input_scaled.astype(np.float32)
-    input_name = model.get_inputs()[0].name
     
-    outputs = model.run(None, {input_name: input_tensor})
-    probabilities = outputs[0][0]  # Extracts the probability distribution array
+   
     
-    # 3. Post-process predictions
-    predicted_index = np.argmax(probabilities)
-    crop = label_encoder.inverse_transform([predicted_index])[0]
-    
-    confidence = float(probabilities[predicted_index] * 100)
-    
-    crop_image = {
-        "apple": [
+    outputs = model.run(None,{input_name: input_tensor})
+    probabilities=outputs[0][0] 
+    predicted_index=np.argmax(probabilities)
+    crop=label_encoder.inverse_transform([predicted_index])[0]
+    confidence=float(probabilities[predicted_index] * 100)
+    crop_image={
+        "apple":[
             "https://img.magnific.com/free-photo/apple-orchard_342744-1013.jpg?semt=ais_hybrid&w=740&q=80",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS152Xf50Yx0Ow_M2ENoXbYeFbKppVPU9OTe8aNCkf4Dvl2CvNQ-_mqISs&s=10"
         ],
-        "banana": [
+        "banana":[
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtxSnPKLb7RSKOqq8ZzrLwCBqhTB9RmBLJcYWB2AIijQSAprVydh1GzZrD&s=10",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp3V8MK6z5qEg686gWs5mhtxkdwImtZOOqM44zqhG7skN4vRKQYyWom4ij&s=10"
         ],
-        "blackgram": [
+        "blackgram":[
             "https://novelseeds.com/wp-content/uploads/2025/01/Untitled-design-96.png",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQCr2Ap-QI2vLSSqPgjdZWxZFkmE8Q19pv0UR3UrEOsa51wCRBfsQM2-s&s=10"
         ],
@@ -101,7 +97,7 @@ def cropRecommend(data: CropInput):
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSETxjuf5WvLbmRQ56aoTMxOLkX_bWSsU7THuX1ytH7CA&s=10",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSuoYW79emleWtk_fhAmhJkM3eRyuqqzMF88KzHSrFs4enIe23mzsp1NM&s=10"
         ],
-        "muskmelon": [
+        "muskmelon":[
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8fpykmBIB5vhqO6RGC2vsS8GqNstAlvnNFaFgAwqQs3oMFgWnU8a6sJ1S&s=10",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT9iRZbM62kGOwZ4cYdhF04G9OeWaVKnqSCIsnixMiKCN7xAW_3gzvOe2R&s=10"
         ],
@@ -130,12 +126,12 @@ def cropRecommend(data: CropInput):
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiFmRowqpp2uhqxo98rhS1A7ZfRkC_IkRh9EkYMT5ytA&s=10"
         ],
     }
-    
-    index = random.randint(0, 1)
-    print("BEFORE RETURN:", time.time() - start)
-    
+    index = random.randint(0,1)
+    print("BEFORE RETURN:",time.time()-start)
     return {
         "crop": str(crop),
         "confidence": round(float(confidence), 1),
         "url": crop_image.get(crop, ["", ""])[index]
     }
+    
+    

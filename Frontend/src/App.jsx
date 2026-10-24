@@ -49,7 +49,7 @@ useEffect(()=>{
     setopen(false)
     setloader(true)
     
-    const response=await fetch("http://127.0.0.1:5000/api/crop/crop_recommendation",
+    const response=await fetch("https://crop-show.onrender.com/api/crop/crop_recommendation",
       {
         method:"POST",
         headers:{
@@ -91,7 +91,7 @@ setcrop(res.crop)
   const search_chart=async()=>{
     
     
-    const response=await fetch("http://127.0.0.1:5000/api/crop/prob_chart",
+    const response=await fetch("https://crop-show.onrender.com/api/crop/prob_chart",
       {
         method:"POST",
         headers:{
@@ -122,7 +122,7 @@ setcrop(res.crop)
   }
   const search_crops=async()=>{
     
-    const response=await fetch("http://127.0.0.1:5000/api/crop/Top_3_crops",
+    const response=await fetch("https://crop-show.onrender.com/api/crop/Top_3_crops",
       {
         method:"POST",
         headers:{
@@ -148,7 +148,7 @@ setcrop(res.crop)
   const search_suggestion=async()=>{
     
     
-    const response=await fetch("http://127.0.0.1:5000/api/crop/fertilizer_suggestion",
+    const response=await fetch("https://crop-show.onrender.com/api/crop/fertilizer_suggestion",
       {
         method:"POST",
         headers:{

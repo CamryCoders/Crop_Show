@@ -33,6 +33,7 @@ const [confidence,setconfidence]=useState("")
 const [msg,setmsg]=useState([])
 const[prob_loader,setprob_loader]=useState(false)
 const [error,seterror]=useState("")
+const chartref=useRef(null)
 
 const bottomref=useRef(null)
 
@@ -41,6 +42,15 @@ useEffect(()=>{
       behavior: "smooth"
     });
 },[Suggest,msg,prob_loader,open])
+useEffect(()=>{
+  
+ chartref.current?.scrollIntoView({
+      behavior: "smooth"
+    });
+  
+ 
+},[prob,open,chart_data])
+
 
 
   const search=async()=>{
@@ -68,8 +78,8 @@ useEffect(()=>{
     )
     const res=await response.json()
     console.log("res",res)
-    if (res.details){
-      seterror(res.details[0].msg)
+    if (res.detail){
+      seterror(res.detail[0].msg)
     }else{
 setcrop(res.crop)
     setconfidence(res.confidence)
@@ -369,10 +379,10 @@ setcrop(res.crop)
                
                </div>)}
 
-               <div ref={bottomref}>
-{prob?<CropChart ref={bottomref}
+               <div  ref={chartref} >
+{prob?<CropChart 
                
-               res={chart_data}/>:(prob_loader?<Loader/>:<></>)}
+               res={chart_data}/>:(prob_loader?<Loader  />:<></>)}
                </div>
                
                {Suggest?<></>:

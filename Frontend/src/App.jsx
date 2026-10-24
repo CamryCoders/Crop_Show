@@ -1,7 +1,5 @@
 import { use, useEffect, useRef, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+
 import './App.css'
 import { Loader } from './Loader.jsx'
 import { CropChart } from './crop_chart.jsx'
@@ -70,8 +68,8 @@ useEffect(()=>{
     )
     const res=await response.json()
     console.log("res",res)
-    if (res.error){
-      seterror(res.error)
+    if (res.details){
+      seterror(res.details[0].msg)
     }else{
 setcrop(res.crop)
     setconfidence(res.confidence)
@@ -365,14 +363,14 @@ setcrop(res.crop)
                   
                 }}
                 className='p-1 bg-black rounded-lg text-white font-bold m-1'>Want Fertilizer Suggestion?</button>
-                <button className='p-1 bg-black rounded-lg text-white font-bold m-1'>Top 3 Crops</button>
+                {/* <button className='p-1 bg-black rounded-lg text-white font-bold m-1'>Top 3 Crops</button> */}
                 
                </div>
                
                </div>)}
 
                <div ref={bottomref}>
-{prob?<CropChart
+{prob?<CropChart ref={bottomref}
                
                res={chart_data}/>:(prob_loader?<Loader/>:<></>)}
                </div>
